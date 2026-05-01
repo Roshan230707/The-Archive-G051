@@ -1,0 +1,63 @@
+<!-- GALLERY COMPONENT -->
+<style>
+    .resource-grid { 
+        display: grid; 
+        grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); 
+        gap: 20px; 
+    }
+    .card { 
+        border: 1px solid #eee; 
+        padding: 20px; 
+        border-radius: 10px; 
+        transition: transform 0.2s; 
+    }
+    .card:hover { transform: translateY(-5px); box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+    
+    .badge { 
+        background: #ebf5ff; 
+        color: #3498db; 
+        padding: 4px 10px; 
+        border-radius: 20px; 
+        font-size: 0.75rem; 
+        font-weight: bold;
+    }
+    .btn-download {
+        background: #27ae60;
+        color: white;
+        border: none;
+        padding: 8px 15px;
+        border-radius: 4px;
+        cursor: pointer;
+        margin-top: 10px;
+    }
+</style>
+
+<section>
+    <h3>Recent Resources</h3>
+    <div class="resource-grid">
+        <article class="card">
+            <span class="badge">Notes</span>
+            <h4>Mathematics III</h4>
+            <p>Code: <strong>CMT 1134</strong></p>
+            <button class="btn-download">Download</button>
+        </article>
+        
+        <div class="resource-grid">
+            <article class="card">
+                <span class="badge">Past Year</span>
+                <h3>Principle Of Physics</h3>
+                <p>Code: <strong>CPP 1113</strong></p>
+                <button class="btn-download">Download</button>
+            </article>                                  
+            </div>
+            <div class="resource-grid">
+                <article class="card">
+                <span class="badge">Tutorial</span>
+                <h3>Introduction To Digital System</h>
+                <p>Code: <strong>CDS 1114</strong></p>
+                <button class="btn-download">Download</button>
+                </article>
+            </div>
+        </div>
+    </div>
+</section>
