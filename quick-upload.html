@@ -1,0 +1,51 @@
+<style>
+    .upload-card { 
+        background: #f9fbff; 
+        padding: 25px; 
+        border-radius: 10px; 
+        margin-bottom: 40px; 
+        border-left: 6px solid #3498db; 
+    }
+    .upload-grid { 
+        display: grid; 
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); 
+        gap: 15px; 
+        align-items: flex-end; 
+    }
+    .form-group label {
+        display: block;
+        font-size: 0.85rem;
+        font-weight: bold;
+        margin-bottom: 5px;
+        color: #7f8c8d;
+    }
+    .upload-field {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 6px;
+    }
+</style>
+
+<section class="upload-card">
+    <h3>Quick Upload</h3>
+    <div class="upload-grid">
+        <div class="form-group">
+            <label>File</label>
+            <input type="file" class="upload-field">
+        </div>
+        <div class="form-group">
+            <label>Subject Code</label>
+            <input type="text" class="upload-field" placeholder="e.g. MAT102">
+        </div>
+        <div class="form-group">
+            <label>Category</label>
+            <select class="upload-field">
+                <option>Notes</option>
+                <option>Past Year</option>
+                <option>Tutorial</option>
+            </select>
+        </div>
+        <button class="btn-search" onclick="alert('Uploading...')">Upload</button>
+    </div>
+</section>
