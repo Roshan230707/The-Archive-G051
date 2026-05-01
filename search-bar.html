@@ -1,0 +1,29 @@
+<!-- SEARCH COMPONENT -->
+<style>
+    .search-area { 
+        display: flex; 
+        gap: 12px; 
+        margin-bottom: 40px; 
+    }
+    .search-input { 
+        flex-grow: 1;
+        padding: 12px; 
+        border: 1px solid #ddd; 
+        border-radius: 6px;
+        font-size: 1rem;
+    }
+    .btn-search {
+        background: #3498db; 
+        color: white; 
+        border: none; 
+        padding: 12px 24px; 
+        border-radius: 6px; 
+        cursor: pointer; 
+        font-weight: 600;
+    }
+</style>
+
+<section class="search-area">
+    <input type="text" class="search-input" placeholder="Search by Subject Code (e.g. COMP101)...">
+    <button class="btn-search">Search</button>
+</section>
