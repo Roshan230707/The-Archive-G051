@@ -1,0 +1,107 @@
+body{
+    font-family: Arial, sans-serif;
+    margin: 40px;
+    background: #f5f7fb;
+}
+
+h1{
+    margin-bottom: 30px;
+}
+
+/* SEARCH BAR */
+
+.search-area{
+    display: flex;
+    gap: 12px;
+    margin-bottom: 40px;
+}
+
+.search-input{
+    flex-grow: 1;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 1rem;
+}
+
+.btn-search{
+    background: #3498db;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+/* UPLOAD SECTION */
+
+.upload-card{
+    background: #f9fbff;
+    padding: 25px;
+    border-radius: 10px;
+    margin-bottom: 40px;
+    border-left: 6px solid #3498db;
+}
+
+.upload-grid{
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 15px;
+    align-items: end;
+}
+
+.form-group label{
+    display: block;
+    font-size: 0.85rem;
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #7f8c8d;
+}
+
+.upload-field{
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+}
+
+/* RESOURCE GALLERY */
+
+.resource-grid{
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 20px;
+}
+
+.card{
+    background: white;
+    border: 1px solid #eee;
+    padding: 20px;
+    border-radius: 10px;
+    transition: 0.2s;
+}
+
+.card:hover{
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.badge{
+    background: #ebf5ff;
+    color: #3498db;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: bold;
+}
+
+.btn-download{
+    background: #27ae60;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 10px;
+}

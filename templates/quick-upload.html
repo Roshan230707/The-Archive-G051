@@ -1,0 +1,78 @@
+<section class="upload-card">
+
+    <h2>Quick Upload</h2>
+
+    <form action="/upload" method="POST">
+
+        <div class="upload-grid">
+
+            <div class="form-group">
+
+                <label>Title</label>
+
+                <input
+                    type="text"
+                    name="title"
+                    class="upload-field"
+                    required
+                >
+
+            </div>
+
+            <div class="form-group">
+
+                <label>Subject Code</label>
+
+                <input
+                    type="text"
+                    name="subject_code"
+                    class="upload-field"
+                    required
+                >
+
+            </div>
+
+            <div class="form-group">
+
+                <label>Category</label>
+
+                <select
+                    name="category"
+                    class="upload-field"
+                >
+
+                    <option>Notes</option>
+                    <option>Past Year</option>
+                    <option>Tutorial</option>
+
+                </select>
+
+            </div>
+
+            <div class="form-group">
+
+                <label>File URL</label>
+
+                <input
+                    type="text"
+                    name="file_url"
+                    class="upload-field"
+                    required
+                >
+
+            </div>
+
+            <button
+                type="submit"
+                class="btn-search"
+            >
+
+                Upload
+
+            </button>
+
+        </div>
+
+    </form>
+
+</section>
