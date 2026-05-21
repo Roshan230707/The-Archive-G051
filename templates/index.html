@@ -4,25 +4,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Student Resource Hub</title>
-
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
-
 <body>
 
     <h1>Student Resource Hub</h1>
 
+    <!-- This dynamically pulls in your friends' separate files -->
     {% include 'search-bar.html' %}
     {% include 'quick-upload.html' %}
 
     <section>
         <h2>Recent Resources</h2>
-
         <div class="resource-grid">
 
             {% for resource in resources %}
             <article class="card">
-
                 <span class="badge">
                     {{ resource.category }}
                 </span>
@@ -30,7 +27,7 @@
                 <h3>{{ resource.title }}</h3>
 
                 <p>
-                    Code:
+                    Code: 
                     <strong>{{ resource.subject_code }}</strong>
                 </p>
 
@@ -39,7 +36,6 @@
                         Download
                     </button>
                 </a>
-
             </article>
             {% endfor %}
 
