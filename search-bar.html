@@ -1,0 +1,194 @@
+-- SEARCH COMPONENT --
+<style>
+    .search-area { 
+        display: flex; 
+        gap: 12px; 
+        margin-bottom: 40px; 
+    }
+    .search-input { 
+        flex-grow: 1;
+        padding: 12px; 
+        border: 1px solid #ddd; 
+        border-radius: 6px;
+        font-size: 1rem;
+    }
+    .btn-search {
+        background: #3498db; 
+        color: white; 
+        border: none; 
+        padding: 12px 24px; 
+        border-radius: 6px; 
+        cursor: pointer; 
+        font-weight: 600;
+    }
+</style>
+
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+
+body{
+    font-family:Arial;
+    padding:20px;
+}
+
+.search-container{
+    margin-bottom:20px;
+}
+
+.search-input{
+    width:300px;
+    padding:10px;
+    border:1px solid #ccc;
+    border-radius:8px;
+}
+
+.subject-list{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+}
+
+.subject-card{
+    padding:15px;
+    border:1px solid #ddd;
+    border-radius:10px;
+    background:#f9f9f9;
+}
+
+.subject-code{
+    font-weight:bold;
+    color:#2c3e50;
+}
+
+.subject-name{
+    color:#555;
+}
+
+</style>
+</head>
+<body>
+
+<div class="search-container">
+
+    <input
+        type="text"
+        id="searchInput"
+        class="search-input"
+        placeholder="Search subject code or name..."
+    >
+
+</div>
+
+<div class="search-container">
+    <!-- Filter Dropdown -->
+    <select id="filterOption" class="filter-select">
+
+        <option value="all">All</option>
+        <option value="pastyears">Past Years</option>
+        <option value="notes">Notes</option>
+
+    </select>
+
+</div>
+
+<div class="subject-list" id="subjectList">
+
+    <div class="subject-card">
+        <div class="subject-code">LAE1113</div>
+        <div class="subject-name">Academic English</div>
+    </div>
+
+    <div class="subject-card">
+        <div class="subject-code">LCT1113</div>
+        <div class="subject-name">Critical Thinking</div>
+    </div>
+
+    <div class="subject-card">
+        <div class="subject-code">CDS1114</div>
+        <div class="subject-name">Introduction to Digital System</div>
+    </div>
+
+</div>
+
+<script>
+
+const searchInput = document.getElementById("searchInput");
+const subjectCards = document.querySelectorAll(".subject-card");
+
+searchInput.addEventListener("input", function(){
+
+    const searchValue = searchInput.value.toLowerCase();
+
+    subjectCards.forEach(function(card){
+
+        const text = card.textContent.toLowerCase();
+
+        if(text.includes(searchValue)){
+            card.style.display = "block";
+        }
+        else{
+            card.style.display = "none";
+        }
+
+    });
+
+});
+
+</script>
+
+</body>
+</html>
+
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+
+.search-container{
+    display:flex;
+    gap:10px;
+    width:500px;
+}
+
+.search-input{
+    flex:1;
+    padding:10px;
+    border:1px solid #ccc;
+    border-radius:8px;
+}
+
+.filter-select{
+    padding:10px;
+    border:1px solid #ccc;
+    border-radius:8px;
+    cursor:pointer;
+}
+
+</style>
+</head>
+<body>
+
+
+<script>
+
+const searchInput = document.getElementById("searchInput");
+const filterOption = document.getElementById("filterOption");
+
+filterOption.addEventListener("change", function(){
+
+    console.log("Selected Filter:", filterOption.value);
+
+});
+
+searchInput.addEventListener("input", function(){
+
+    console.log("Searching:", searchInput.value);
+
+});
+
+</script>
+
+</body>
+</html>
