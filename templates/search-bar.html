@@ -1,6 +1,18 @@
-<section class="search-area">
-    <form action="/search" method="GET" style="display:flex; gap:12px; width:100%;">
-        <input type="text" name="query" class="search-input" placeholder="Search by Subject Code...">
-        <button class="btn-search">Search</button>
-    </form>
-</section>
+<form action="/search" method="GET" style="display: flex; gap: 12px; width: 100%; margin-bottom: 2.5rem;">
+    
+    <div class="search-area" style="flex: 1; display: flex; gap: 10px; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 10px; box-shadow: 0 1px 3px rgba(28, 26, 22, 0.04);">
+        <input type="text" name="query" class="search-input" value="{{ request.args.get('query', '') }}" placeholder="Search by Subject Code..." style="flex: 1; border: none; outline: none; background: transparent; font-family: 'DM Sans', sans-serif; font-size: 0.95rem; color: var(--text-main); padding: 6px 10px;">
+    </div>
+
+    <div class="filter-area" style="display: flex; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 5px 10px;">
+        <select name="category" class="upload-field" style="border: none; background: transparent; font-family: 'DM Sans', sans-serif; font-size: 0.95rem; color: var(--text-main); outline: none; cursor: pointer;">
+            {% set selected_cat = request.args.get('category', 'all') %}
+            <option value="all" {% if selected_cat == 'all' %}selected{% endif %}>All Categories</option>
+            <option value="Notes" {% if selected_cat == 'Notes' %}selected{% endif %}>Notes</option>
+            <option value="Past Year" {% if selected_cat == 'Past Year' %}selected{% endif %}>Past Year</option>
+            <option value="Tutorial" {% if selected_cat == 'Tutorial' %}selected{% endif %}>Tutorial</option>
+        </select>
+    </div>
+
+    <button type="submit" class="btn-search">Search</button>
+</form>

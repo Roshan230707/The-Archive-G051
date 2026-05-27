@@ -8,18 +8,29 @@
 </head>
 <body>
 
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-        <h1>Student Resource Hub</h1>
-        {% if session.get('user') %}
-            <a href="/logout" style="color: var(--accent-hover); font-weight: 500; text-decoration: none; font-size: 0.9rem;">Logout</a>
-        {% endif %}
-    </div>
+    {% include 'breadcrumbs.html' %}
 
-    
+    <header style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; margin-top: 10px;">
+        <div style="display: flex; align-items: center; gap: 15px;">
+            <label for="sidebar-toggle" class="menu-toggle-btn">
+                <div class="hamburger-icon">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </label>
+            <h1 style="margin: 0;">Student Resource Hub</h1>
+        </div>
+
+        {% if session.get('user') %}
+            <div class="card-meta" style="font-family: 'DM Sans', sans-serif;">
+                <a href="/logout" style="color: var(--accent-hover); font-weight: 500; text-decoration: none; border: 1px solid var(--border); padding: 6px 14px; border-radius: var(--radius);">Logout</a>
+            </div>
+        {% endif %}
+    </header>
+
     {% include 'search-bar.html' %}
     {% include 'quick-upload.html' %}
-
-  
 
     <section>
         <h2>Recent Resources</h2>
@@ -48,6 +59,10 @@
                     </button>
                 </a>
             </article>
+            {% else %}
+                <p style="color: var(--text-muted); grid-column: 1 / -1; text-align: center; padding: 40px 0; font-family: 'DM Sans', sans-serif;">
+                    No resources found matching your search parameters or category filter selection.
+                </p>
             {% endfor %}
 
         </div>
