@@ -2,7 +2,6 @@ from flask import Flask, render_template, request, redirect, session
 from supabase import create_client
 from auth import auth_bp            
 from downloads import downloads_bp  
-# Importing the two new independent modules cleanly
 from admin import admin_bp
 from comments import comments_bp
 
@@ -19,7 +18,7 @@ def home():
     if "user" not in session:  
         return redirect("/login")
 
-    # Filtered to only display approved resources on the student homepage
+
     response = supabase.table("resources").select("*").eq("is_approved", True).execute()
     resources = response.data
     
@@ -39,7 +38,6 @@ def upload():
     category = request.form["category"]
     file_url = request.form["file_url"]
 
-    # Newly uploaded items default to unapproved (is_approved: False) until a moderator acts
     supabase.table("resources").insert({
         "title": title,
         "subject_code": subject_code,
@@ -50,7 +48,6 @@ def upload():
 
     return redirect("/")
 
-# SERVER-SIDE ROUTED SEARCH (FILTERING WITH SUPABASE)
 @app.route("/search")
 def search():
     if "user" not in session:
@@ -59,10 +56,9 @@ def search():
     query = request.args.get("query", "")
     category = request.args.get("category", "all")
 
-    # Filter by subject code match AND force items to be approved
     db_query = supabase.table("resources").select("*").ilike("subject_code", f"%{query}%").eq("is_approved", True)
 
-    # If category dropdown is not set to 'all', add category match filter
+
     if category != "all":
         db_query = db_query.eq("category", category)
 

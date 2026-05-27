@@ -7,7 +7,6 @@ supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
 
 admin_bp = Blueprint('admin', __name__)
 
-# Change this to whatever email you use to log in as admin!
 ADMIN_EMAILS = ["caitlintnathan2007@gmail.com"]
 
 def require_admin():

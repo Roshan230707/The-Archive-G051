@@ -2,7 +2,7 @@
 from flask import Blueprint, render_template, request, redirect, session, flash
 from supabase import create_client
 
-# Re-using your exact Supabase credentials
+
 SUPABASE_URL = "https://zrzoddxzskquxhkzftwr.supabase.co"
 SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inpyem9kZHh6c2txdXhoa3pmdHdyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg2NjYyODEsImV4cCI6MjA5NDI0MjI4MX0.lB-D9HpPGC4ykbvRlMht_milJIml5KDiVHYgfeQGyh8"
 supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
