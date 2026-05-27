@@ -27,6 +27,9 @@ def home():
 # UPLOAD RESOURCE
 @app.route("/upload", methods=["POST"])
 def upload():
+    if "user" not in session:
+        return redirect("/login")
+
     title = request.form["title"]
     subject_code = request.form["subject_code"]
     category = request.form["category"]
@@ -41,11 +44,23 @@ def upload():
 
     return redirect("/")
 
-# SEARCH
+# SERVER-SIDE ROUTED SEARCH (FILTERING WITH SUPABASE)
 @app.route("/search")
 def search():
+    if "user" not in session:
+        return redirect("/login")
+
     query = request.args.get("query", "")
-    response = supabase.table("resources").select("*").ilike("subject_code", f"%{query}%").execute()
+    category = request.args.get("category", "all")
+
+    # Start by filtering match on the subject code text
+    db_query = supabase.table("resources").select("*").ilike("subject_code", f"%{query}%")
+
+    # If category dropdown is not set to 'all', add category match filter
+    if category != "all":
+        db_query = db_query.eq("category", category)
+
+    response = db_query.execute()
     resources = response.data
     
     counts_res = supabase.table("downloads").select("*").execute()
@@ -53,7 +68,7 @@ def search():
     
     return render_template("index.html", resources=resources, counts=counts)
 
-# REGISTER NEW FEATURES
+# BLUEPRINT REGISTRATIONS
 app.register_blueprint(auth_bp)
 app.register_blueprint(downloads_bp)
 
