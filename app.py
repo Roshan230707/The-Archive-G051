@@ -2,6 +2,9 @@ from flask import Flask, render_template, request, redirect, session
 from supabase import create_client
 from auth import auth_bp            
 from downloads import downloads_bp  
+# Importing the two new independent modules cleanly
+from admin import admin_bp
+from comments import comments_bp
 
 app = Flask(__name__)
 app.secret_key = "super-secret-key"  
@@ -16,7 +19,8 @@ def home():
     if "user" not in session:  
         return redirect("/login")
 
-    response = supabase.table("resources").select("*").execute()
+    # Filtered to only display approved resources on the student homepage
+    response = supabase.table("resources").select("*").eq("is_approved", True).execute()
     resources = response.data
     
     counts_res = supabase.table("downloads").select("*").execute()
@@ -35,11 +39,13 @@ def upload():
     category = request.form["category"]
     file_url = request.form["file_url"]
 
+    # Newly uploaded items default to unapproved (is_approved: False) until a moderator acts
     supabase.table("resources").insert({
         "title": title,
         "subject_code": subject_code,
         "category": category,
-        "file_url": file_url
+        "file_url": file_url,
+        "is_approved": False
     }).execute()
 
     return redirect("/")
@@ -53,8 +59,8 @@ def search():
     query = request.args.get("query", "")
     category = request.args.get("category", "all")
 
-    # Start by filtering match on the subject code text
-    db_query = supabase.table("resources").select("*").ilike("subject_code", f"%{query}%")
+    # Filter by subject code match AND force items to be approved
+    db_query = supabase.table("resources").select("*").ilike("subject_code", f"%{query}%").eq("is_approved", True)
 
     # If category dropdown is not set to 'all', add category match filter
     if category != "all":
@@ -71,6 +77,8 @@ def search():
 # BLUEPRINT REGISTRATIONS
 app.register_blueprint(auth_bp)
 app.register_blueprint(downloads_bp)
+app.register_blueprint(admin_bp)
+app.register_blueprint(comments_bp)
 
 if __name__ == "__main__":
     app.run(debug=True)

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Moderator Panel</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+        <h1>Moderator Dashboard</h1>
+        <a href="/" style="color: var(--primary); font-weight: 500; text-decoration: none; font-size: 0.9rem;">Back to Hub</a>
+    </div>
+
+    <section style="margin-bottom: 3rem;">
+        <h2>Pending Approvals ({{ pending|length }})</h2>
+        <div class="resource-grid">
+            {% for resource in pending %}
+            <article class="card" style="border-top: 3px solid var(--accent);">
+                <span class="badge">{{ resource.category }}</span>
+                <h3>{{ resource.title }}</h3>
+                <p>Code: <strong>{{ resource.subject_code }}</strong></p>
+                <p><a href="{{ resource.file_url }}" target="_blank" style="color: var(--accent-hover); text-decoration: underline;">Verify File Link</a></p>
+                <div style="display: flex; gap: 10px; margin-top: auto;">
+                    <a href="/admin/approve/{{ resource.id }}" style="flex: 1;"><button class="btn-search" style="width: 100%; padding: 8px;">Approve</button></a>
+                    <a href="/admin/reject/{{ resource.id }}" style="flex: 1;"><button class="btn-download" style="width: 100%; padding: 8px; color: #a94442; background: #f2dede;">Reject</button></a>
+                </div>
+            </article>
+            {% endfor %}
+            {% if not pending %}<p style="color: var(--text-muted);">No uploads awaiting approval.</p>{% endif %}
+        </div>
+    </section>
+</body>
+</html>
