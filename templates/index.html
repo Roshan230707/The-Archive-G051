@@ -8,12 +8,17 @@
 </head>
 <body>
 
-    <h1>Student Resource Hub</h1>
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+        <h1>Student Resource Hub</h1>
+        {% if session.get('user') %}
+            <a href="/logout" style="color: var(--accent-hover); font-weight: 500; text-decoration: none; font-size: 0.9rem;">Logout</a>
+        {% endif %}
+    </div>
 
     
     {% include 'search-bar.html' %}
     {% include 'quick-upload.html' %}
-    {% include 'comments.html' %}
+
   
 
     <section>
@@ -33,7 +38,11 @@
                     <strong>{{ resource.subject_code }}</strong>
                 </p>
 
-                <a href="{{ resource.file_url }}" target="_blank">
+                <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: -5px; font-weight: 400;">
+                    Downloads: {{ counts.get(resource.id|string, 0) }}
+                </p>
+
+                <a href="/download/{{ resource.id }}" target="_blank">
                     <button class="btn-download">
                         Download
                     </button>
