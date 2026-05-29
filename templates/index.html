@@ -39,9 +39,14 @@
 
             {% for resource in resources %}
             <article class="card">
-                <span class="badge">
-                    {{ resource.category }}
-                </span>
+                <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                    <span class="badge">
+                        {{ resource.category }}
+                    </span>
+                    <span style="font-size: 0.8rem; font-weight: 500; color: var(--accent-hover);">
+                        ⭐ {{ ratings.get(resource.id|string, "New") }}
+                    </span>
+                </div>
 
                 <h3>{{ resource.title }}</h3>
 
@@ -53,6 +58,10 @@
                 <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: -5px; font-weight: 400;">
                     Downloads: {{ counts.get(resource.id|string, 0) }} 
                     | <a href="/resource/{{ resource.id }}" style="color: var(--accent-hover); text-decoration: underline; font-weight: 500;">Discuss</a>
+                    
+                    {% if session.get('user') == resource.uploaded_by %}
+                    | <a href="/resource/{{ resource.id }}/edit" style="color: var(--text-muted); text-decoration: underline;">Edit</a>
+                    {% endif %}
                 </p>
 
                 <a href="/download/{{ resource.id }}" target="_blank">

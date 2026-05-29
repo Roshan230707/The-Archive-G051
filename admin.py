@@ -7,7 +7,7 @@ supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
 
 admin_bp = Blueprint('admin', __name__)
 
-ADMIN_EMAILS = ["caitlintnathan2007@gmail.com"]
+ADMIN_EMAILS = ["caitlintnathan2007@gmail.com","roshanvictor237@gmail.com"]
 
 def require_admin():
     if "user" not in session or session["user"] not in ADMIN_EMAILS:

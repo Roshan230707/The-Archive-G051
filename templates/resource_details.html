@@ -6,19 +6,42 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    <div style="margin-bottom: 20px;"><a href="/" style="color: var(--primary); font-weight: 500; text-decoration: none;">← Back to Hub</a></div>
+    <div style="margin-bottom: 20px;">
+        <a href="/" style="color: var(--primary); font-weight: 500; text-decoration: none; font-size: 0.9rem;">← Back to Hub</a>
+    </div>
 
     <article class="upload-card" style="margin-bottom: 2rem;">
-        <span class="badge">{{ resource.category }}</span>
-        <h1 style="font-size: 2rem; margin-top: 10px;">{{ resource.title }}</h1>
-        <p>Subject Code: <strong>{{ resource.subject_code }}</strong></p>
+        <span class="badge" style="margin-bottom: 10px;">{{ resource.category }}</span>
+        <h1 style="font-size: 2rem; margin-bottom: 10px;">{{ resource.title }}</h1>
+        <p style="font-size: 1rem; color: var(--text-muted);">Subject Code: <strong>{{ resource.subject_code }}</strong></p>
+        <div style="max-width: 200px; margin-top: 15px;">
+            <a href="/download/{{ resource.id }}" target="_blank">
+                <button class="btn-submit">Download Resource File</button>
+            </a>
+        </div>
     </article>
+
+    <section class="upload-card" style="margin-bottom: 2rem; background: var(--accent-light);">
+        <h3 style="font-family: 'DM Sans', sans-serif; font-size: 1rem; font-weight: 500; color: var(--text-main);">Rate this Resource</h3>
+        <form action="/resource/{{ resource.id }}/rate" method="POST" style="display: flex; gap: 15px; align-items: center; margin-top: 10px;">
+            <select name="rating" class="upload-field" style="max-width: 160px; background: white;">
+                <option value="5">⭐⭐⭐⭐⭐ (5)</option>
+                <option value="4">⭐⭐⭐⭐ (4)</option>
+                <option value="3">⭐⭐⭐ (3)</option>
+                <option value="2">⭐⭐ (2)</option>
+                <option value="1">⭐ (1)</option>
+            </select>
+            <button type="submit" class="btn-search" style="padding: 8px 16px; font-size: 0.85rem;">Submit Rating</button>
+        </form>
+    </section>
 
     <section class="upload-card">
         <h2>Discussion Thread</h2>
+        
         <form action="/resource/{{ resource.id }}/comment" method="POST" style="margin-bottom: 2rem;">
             <div class="form-group">
-                <textarea name="comment_text" class="upload-field" rows="3" placeholder="Ask a question..." required></textarea>
+                <label>Join the conversation</label>
+                <textarea name="comment_text" class="upload-field" rows="3" placeholder="Ask a question or leave feedback..." required style="resize: vertical;"></textarea>
             </div>
             <button type="submit" class="btn-search" style="margin-top: 10px;">Post Comment</button>
         </form>
@@ -28,10 +51,15 @@
             <div style="background: var(--bg-main); padding: 12px 16px; border-radius: var(--radius); border-left: 4px solid var(--accent);">
                 <div style="display: flex; justify-content: space-between; font-size: 0.78rem; color: var(--text-muted); margin-bottom: 6px;">
                     <strong>{{ comment.user_email }}</strong>
+                    <span>{{ comment.created_at[:10] }}</span>
                 </div>
-                <p style="font-size: 0.92rem;">{{ comment.comment_text }}</p>
+                <p style="font-size: 0.92rem; color: var(--text-main); font-weight: 400; line-height: 1.4;">{{ comment.comment_text }}</p>
             </div>
             {% endfor %}
+            
+            {% if not comments %}
+            <p style="color: var(--text-muted); font-size: 0.9rem; text-align: center; padding: 20px 0;">No comments posted yet. Be the first!</p>
+            {% endif %}
         </div>
     </section>
 </body>

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Resource</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div style="margin-bottom: 20px;">
+        <a href="/" style="color: var(--primary); font-weight: 500; text-decoration: none;">← Cancel and Go Back</a>
+    </div>
+
+    <section class="upload-card" style="max-width: 600px; margin: 0 auto;">
+        <h2>Update Resource Info</h2>
+        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 20px;">
+            Note: Making updates will temporarily hide this resource until moderators re-approve it.
+        </p>
+        
+        <form action="/resource/{{ resource.id }}/edit" method="POST">
+            <div class="form-group" style="margin-bottom: 15px;">
+                <label>Title</label>
+                <input type="text" name="title" class="upload-field" value="{{ resource.title }}" required>
+            </div>
+            <div class="form-group" style="margin-bottom: 15px;">
+                <label>Subject Code</label>
+                <input type="text" name="subject_code" class="upload-field" value="{{ resource.subject_code }}" required>
+            </div>
+            <div class="form-group" style="margin-bottom: 15px;">
+                <label>Category</label>
+                <select name="category" class="upload-field">
+                    <option {% if resource.category == 'Notes' %}selected{% endif %}>Notes</option>
+                    <option {% if resource.category == 'Past Year' %}selected{% endif %}>Past Year</option>
+                    <option {% if resource.category == 'Tutorial' %}selected{% endif %}>Tutorial</option>
+                </select>
+            </div>
+            <div class="form-group" style="margin-bottom: 20px;">
+                <label>File URL</label>
+                <input type="text" name="file_url" class="upload-field" value="{{ resource.file_url }}" required>
+            </div>
+            <button type="submit" class="btn-submit">Save Changes</button>
+        </form>
+    </section>
+</body>
+</html>
