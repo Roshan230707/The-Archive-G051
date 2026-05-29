@@ -17,7 +17,7 @@ def rate_resource(resource_id):
         rating_val = int(rating_val)
         if 1 <= rating_val <= 5:
             try:
-                # Upsert: Inserts if new, updates existing rating if the student changes their mind
+          
                 supabase.table("ratings").upsert({
                     "resource_id": resource_id,
                     "user_email": session["user"],

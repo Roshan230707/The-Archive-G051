@@ -4,7 +4,7 @@ from auth import auth_bp
 from downloads import downloads_bp  
 from admin import admin_bp
 from comments import comments_bp
-# --- ADD THESE TWO NEW IMPORTS HERE ---
+
 from edit_resource import edit_bp
 from ratings import ratings_bp
 

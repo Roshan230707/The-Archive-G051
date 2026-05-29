@@ -13,7 +13,7 @@ def track_download(resource_id):
         return redirect("/login")
 
     try:
-        # 1. Fetch current download record
+
         res = supabase.table("downloads").select("*").eq("resource_id", resource_id).execute()
         
         if res.data:
@@ -22,7 +22,7 @@ def track_download(resource_id):
         else:
             supabase.table("downloads").insert({"resource_id": resource_id, "count": 1}).execute()
 
-        # 2. Get target URL to send the student to download page
+    
         resource = supabase.table("resources").select("file_url").eq("id", int(resource_id)).execute()
         
         if resource.data and len(resource.data) > 0:
