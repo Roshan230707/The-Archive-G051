@@ -1,6 +1,10 @@
 from flask import Blueprint, render_template, request, redirect, session, abort
 from supabase import create_client
 
+
+import time
+from werkzeug.utils import secure_filename
+
 SUPABASE_URL = "https://zrzoddxzskquxhkzftwr.supabase.co"
 SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inpyem9kZHh6c2txdXhoa3pmdHdyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg2NjYyODEsImV4cCI6MjA5NDI0MjI4MX0.lB-D9HpPGC4ykbvRlMht_milJIml5KDiVHYgfeQGyh8"
 supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
@@ -12,29 +16,54 @@ def edit_resource(resource_id):
     if "user" not in session:
         return redirect("/login")
         
- 
     res = supabase.table("resources").select("*").eq("id", resource_id).execute()
     if not res.data:
         return "Resource not found", 404
         
     resource = res.data[0]
     
-   
     if resource.get("uploaded_by") != session["user"]:
-        abort(403) # Forbidden
+        abort(403)
         
     if request.method == "POST":
         updated_title = request.form["title"]
         updated_code = request.form["subject_code"]
         updated_category = request.form["category"]
-        updated_url = request.form["file_url"]
         
-    
+      
+        file_url = resource["file_url"]
+        
+        
+        if 'resource_file' in request.files:
+            file = request.files['resource_file']
+            
+         
+            if file and file.filename != '':
+                filename = secure_filename(file.filename)
+                unique_filename = f"{int(time.time())}_{filename}"
+                
+                try:
+                    file_data = file.read()
+                    
+                
+                    supabase.storage.from_("resources").upload(
+                        path=unique_filename,
+                        file=file_data,
+                        file_options={"content-type": file.content_type}
+                    )
+                    
+                    
+                    file_url = f"{SUPABASE_URL}/storage/v1/object/public/resources/{unique_filename}"
+                    
+                except Exception as e:
+                    return f"Updating file storage failed: {str(e)}", 500
+        
+        
         supabase.table("resources").update({
             "title": updated_title,
             "subject_code": updated_code,
             "category": updated_category,
-            "file_url": updated_url,
+            "file_url": file_url,
             "is_approved": False 
         }).eq("id", resource_id).execute()
         

@@ -17,13 +17,16 @@ def rate_resource(resource_id):
         rating_val = int(rating_val)
         if 1 <= rating_val <= 5:
             try:
-          
-                supabase.table("ratings").upsert({
-                    "resource_id": resource_id,
+                
+                result = supabase.table("ratings").upsert({
+                    "resource_id": int(resource_id),
                     "user_email": session["user"],
                     "rating": rating_val
                 }, on_conflict="resource_id,user_email").execute()
+                
+                print(" DATABASE SUCCESS:", result.data) 
+                
             except Exception as e:
-                print("Rating submission error:", e)
+                print("DATABASE CRASH ERROR DETAILS:", str(e)) 
                 
     return redirect(f"/resource/{resource_id}")

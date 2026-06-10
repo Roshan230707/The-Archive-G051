@@ -16,7 +16,7 @@
             Note: Making updates will temporarily hide this resource until moderators re-approve it.
         </p>
         
-        <form action="/resource/{{ resource.id }}/edit" method="POST">
+        <form action="/resource/{{ resource.id }}/edit" method="POST" enctype="multipart/form-data">
             <div class="form-group" style="margin-bottom: 15px;">
                 <label>Title</label>
                 <input type="text" name="title" class="upload-field" value="{{ resource.title }}" required>
@@ -34,8 +34,11 @@
                 </select>
             </div>
             <div class="form-group" style="margin-bottom: 20px;">
-                <label>File URL</label>
-                <input type="text" name="file_url" class="upload-field" value="{{ resource.file_url }}" required>
+                <label>Replace File (Optional)</label>
+                <input type="file" name="resource_file" class="upload-field">
+                <p style="font-size:0.75rem; color: var(--text-muted); margin-top:5px;">
+                    Current file: <a href="{{ resource.file_url }}" target="_blank" style="color: var(--accent-hover);">View Current Link</a>
+                </p>
             </div>
             <button type="submit" class="btn-submit">Save Changes</button>
         </form>
