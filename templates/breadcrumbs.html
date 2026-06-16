@@ -44,7 +44,7 @@
         height: 100vh;
         background-color: var(--primary);
         color: #fdf6ec;
-        z-index: 1000;
+        z-index: 1001; /* Layer over other UI elements */
         padding: 24px;
         transform: translateX(-100%);
         transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -97,13 +97,12 @@
         width: 100vw;
         height: 100vh;
         background-color: rgba(28, 26, 22, 0.4);
-        z-index: 999;
+        z-index: 1000;
         opacity: 0;
         pointer-events: none;
         transition: opacity 0.3s ease;
     }
 
-    
     #sidebar-toggle:checked ~ .sidebar {
         transform: translateX(0);
     }
@@ -121,10 +120,8 @@
         <label for="sidebar-toggle" class="close-btn">×</label>
     </div>
     <ul class="sidebar-links">
-        <li><a href="/">All Resources 📚</a></li>
-        <li><a href="#">Recent Adds 🆕</a></li>
-        <li><a href="#">History 👣</a></li>
-        <li><a href="#">Favourites ❤️</a></li>
+        <li><a href="/" onclick="document.getElementById('sidebar-toggle').checked = false;">All Resources 📚</a></li>
+        <li><a href="#recent-resources" onclick="document.getElementById('sidebar-toggle').checked = false;">Recent Adds 🆕</a></li>
         <li><a href="/logout">Logout 👤</a></li>
     </ul>
 </nav>

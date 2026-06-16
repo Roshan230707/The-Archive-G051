@@ -5,6 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Student Resource Hub</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        html {
+            scroll-behavior: smooth;
+        }
+    </style>
 </head>
 <body>
 
@@ -33,7 +38,7 @@
     {% include 'search-bar.html' %}
     {% include 'quick-upload.html' %}
 
-    <section>
+    <section id="recent-resources">
         <h2>Recent Resources</h2>
         <div class="resource-grid">
 
@@ -56,7 +61,6 @@
                 </p>
 
                 <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: -5px; font-weight: 400; margin-bottom: 15px;">
-                  
                     | <a href="/resource/{{ resource.id }}" style="color: var(--accent-hover); text-decoration: underline; font-weight: 500;">Discuss</a>
                     
                     {% if session.get('user') == resource.uploaded_by %}
@@ -80,7 +84,7 @@
             </article>
             {% else %}
                 <p style="color: var(--text-muted); grid-column: 1 / -1; text-align: center; padding: 40px 0; font-family: 'DM Sans', sans-serif;">
-                  
+                    No resources found.
                 </p>
             {% endfor %}
 
