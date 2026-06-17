@@ -1,3 +1,4 @@
+import os
 from flask import Flask, render_template, request, redirect, session
 from supabase import create_client
 from auth import auth_bp            
@@ -8,12 +9,11 @@ from edit_resource import edit_bp
 from ratings import ratings_bp
 
 app = Flask(__name__)
-app.secret_key = "super-secret-key"  
+app.secret_key = os.environ.get("FLASK_SECRET_KEY", "super-secret-key")  
 
-SUPABASE_URL = "https://zrzoddxzskquxhkzftwr.supabase.co"
-SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inpyem9kZHh6c2txdXhoa3pmdHdyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg2NjYyODEsImV4cCI6MjA5NDI0MjI4MX0.lB-D9HpPGC4ykbvRlMht_milJIml5KDiVHYgfeQGyh8"
+SUPABASE_URL = os.environ.get("SUPABASE_URL", "https://zrzoddxzskquxhkzftwr.supabase.co")
+SUPABASE_KEY = os.environ.get("SUPABASE_KEY", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inpyem9kZHh6c2txdXhoa3pmdHdyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg2NjYyODEsImV4cCI6MjA5NDI0MjI4MX0.lB-D9HpPGC4ykbvRlMht_milJIml5KDiVHYgfeQGyh8")
 supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
-
 
 def get_avg_ratings():
     try:
@@ -28,7 +28,6 @@ def get_avg_ratings():
     except Exception:
         return {}
 
-
 @app.route("/")
 def home():
     if "user" not in session:  
@@ -42,7 +41,6 @@ def home():
     
     ratings = get_avg_ratings()
     return render_template("index.html", resources=resources, counts=counts, ratings=ratings)
-
 
 @app.route("/upload", methods=["POST"])
 def upload():
@@ -64,7 +62,6 @@ def upload():
     }).execute()
 
     return redirect("/")
-
 
 @app.route("/search")
 def search():
@@ -88,8 +85,6 @@ def search():
     
     return render_template("index.html", resources=resources, counts=counts, ratings=ratings)
 
-
-# Blueprint Registrations
 app.register_blueprint(auth_bp)
 app.register_blueprint(downloads_bp)
 app.register_blueprint(admin_bp)
@@ -98,4 +93,6 @@ app.register_blueprint(edit_bp)
 app.register_blueprint(ratings_bp)
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    import os
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host="0.0.0.0", port=port)
