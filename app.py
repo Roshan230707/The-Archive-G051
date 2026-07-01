@@ -1,6 +1,9 @@
 import os
+import time  # 🆕 Unique timestamp generator for filenames
 from flask import Flask, render_template, request, redirect, session
 from supabase import create_client
+from werkzeug.utils import secure_filename  # 🆕 Utility to sanitize filenames safely
+
 from auth import auth_bp            
 from downloads import downloads_bp  
 from admin import admin_bp
@@ -18,10 +21,14 @@ supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
 def get_avg_ratings():
     try:
         data_res = supabase.table("ratings").select("resource_id, rating").execute()
+        if not data_res.data:
+            return {}
+            
         averages = {}
         counts = {}
         for row in data_res.data:
-            r_id = str(row["resource_id"])
+            # Force string key to guarantee index matching with Jinja loops
+            r_id = str(row["resource_id"]).strip()
             averages[r_id] = averages.get(r_id, 0) + row["rating"]
             counts[r_id] = counts.get(r_id, 0) + 1
         return {r_id: round(averages[r_id] / counts[r_id], 1) for r_id in averages}
@@ -39,7 +46,10 @@ def home():
     counts_res = supabase.table("downloads").select("*").execute()
     counts = {str(item["resource_id"]): item["count"] for item in counts_res.data}
     
-    ratings = get_avg_ratings()
+    raw_ratings = get_avg_ratings()
+    # Explicitly stringify keys to ensure the card's 'ratings.get' method functions perfectly
+    ratings = {str(k): v for k, v in raw_ratings.items()}
+    
     return render_template("index.html", resources=resources, counts=counts, ratings=ratings)
 
 @app.route("/upload", methods=["POST"])
@@ -50,16 +60,42 @@ def upload():
     title = request.form["title"]
     subject_code = request.form["subject_code"]
     category = request.form["category"]
-    file_url = request.form["file_url"]
+    
+    # Check if the file wrapper exists in your form submission array
+    if 'resource_file' not in request.files:
+        return "Form setup issue: File part missing.", 400
+        
+    file = request.files['resource_file']
+    
+    if file.filename == '':
+        return "No file selected in picker selection", 400
 
-    supabase.table("resources").insert({
-        "title": title,
-        "subject_code": subject_code,
-        "category": category,
-        "file_url": file_url,
-        "is_approved": False,
-        "uploaded_by": session["user"] 
-    }).execute()
+    if file:
+        filename = secure_filename(file.filename)
+        unique_filename = f"{int(time.time())}_{filename}"
+        
+        try:
+            # Stream payload straight into your resources public bucket
+            file_data = file.read()
+            supabase.storage.from_("resources").upload(
+                path=unique_filename,
+                file=file_data,
+                file_options={"content-type": file.content_type}
+            )
+            file_url = f"{SUPABASE_URL}/storage/v1/object/public/resources/{unique_filename}"
+            
+        except Exception as e:
+            return f"Supabase Storage Engine upload failure: {str(e)}", 500
+
+        # Save resource record information directly with your newly generated public URL link
+        supabase.table("resources").insert({
+            "title": title,
+            "subject_code": subject_code,
+            "category": category,
+            "file_url": file_url,
+            "is_approved": False,
+            "uploaded_by": session["user"] 
+        }).execute()
 
     return redirect("/")
 
@@ -81,7 +117,9 @@ def search():
     
     counts_res = supabase.table("downloads").select("*").execute()
     counts = {str(item["resource_id"]): item["count"] for item in counts_res.data}
-    ratings = get_avg_ratings()
+    
+    raw_ratings = get_avg_ratings()
+    ratings = {str(k): v for k, v in raw_ratings.items()}
     
     return render_template("index.html", resources=resources, counts=counts, ratings=ratings)
 
@@ -93,6 +131,5 @@ app.register_blueprint(edit_bp)
 app.register_blueprint(ratings_bp)
 
 if __name__ == "__main__":
-    import os
     port = int(os.environ.get("PORT", 5000))
     app.run(host="0.0.0.0", port=port)
