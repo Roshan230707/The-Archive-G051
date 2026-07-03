@@ -1,10 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap');
 
-/* ============================================================
-   FOREST & SAND THEME
-   Palette: Deep Forest Green + Warm Sand + Parchment
-   Fonts: DM Serif Display (headings) + DM Sans (body)
-   ============================================================ */
+
 
 :root {
     --primary: #1a3a2a;
@@ -63,7 +59,7 @@ h2 {
     margin-bottom: 1rem;
 }
 
-/* SEARCH BAR */
+
 .search-area {
     display: flex;
     gap: 10px;
@@ -111,7 +107,7 @@ h2 {
 .btn-search:hover { background: var(--primary-hover); transform: translateY(-1px); }
 .btn-search:active { transform: translateY(0); }
 
-/* UPLOAD CARD */
+
 .upload-card {
     background: var(--bg-card);
     border: 1px solid var(--border);
