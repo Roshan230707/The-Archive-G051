@@ -17,7 +17,7 @@ def view_resource(resource_id):
         
         comments_res = supabase.table("comments").select("*").eq("resource_id", resource_id).order("created_at", desc=True).execute()
         
-        # 🔵 DEBUG LOG: Look at your console/terminal to see the column names!
+       
         if comments_res.data:
             print("\n🔵 CURRENT COMMENT DATABASE KEYS LOOK LIKE THIS:", comments_res.data[0], "\n")
             
@@ -40,7 +40,7 @@ def post_comment(resource_id):
             }).execute()
         except Exception as e:
             print("🔴 ERROR POSTING COMMENT TO DATABASE:", str(e))
-            # Fallback block in case your column name in the database is actually called 'email'
+            
             try:
                 supabase.table("comments").insert({
                     "resource_id": resource_id, 
@@ -67,7 +67,7 @@ def edit_comment(resource_id, comment_id):
             return "Comment not found", 404
             
         comment_data = comment_check.data[0]
-        # Match either user_email or email fields dynamically
+        
         owner_email = comment_data.get("user_email") or comment_data.get("email")
         
         if owner_email != session["user"]:

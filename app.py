@@ -1,8 +1,8 @@
 import os
-import time  # 🆕 Unique timestamp generator for filenames
+import time  
 from flask import Flask, render_template, request, redirect, session
 from supabase import create_client
-from werkzeug.utils import secure_filename  # 🆕 Utility to sanitize filenames safely
+from werkzeug.utils import secure_filename 
 
 from auth import auth_bp            
 from downloads import downloads_bp  
@@ -27,7 +27,7 @@ def get_avg_ratings():
         averages = {}
         counts = {}
         for row in data_res.data:
-            # Force string key to guarantee index matching with Jinja loops
+            
             r_id = str(row["resource_id"]).strip()
             averages[r_id] = averages.get(r_id, 0) + row["rating"]
             counts[r_id] = counts.get(r_id, 0) + 1
@@ -47,7 +47,7 @@ def home():
     counts = {str(item["resource_id"]): item["count"] for item in counts_res.data}
     
     raw_ratings = get_avg_ratings()
-    # Explicitly stringify keys to ensure the card's 'ratings.get' method functions perfectly
+   
     ratings = {str(k): v for k, v in raw_ratings.items()}
     
     return render_template("index.html", resources=resources, counts=counts, ratings=ratings)
@@ -61,7 +61,7 @@ def upload():
     subject_code = request.form["subject_code"]
     category = request.form["category"]
     
-    # Check if the file wrapper exists in your form submission array
+    
     if 'resource_file' not in request.files:
         return "Form setup issue: File part missing.", 400
         
@@ -75,7 +75,7 @@ def upload():
         unique_filename = f"{int(time.time())}_{filename}"
         
         try:
-            # Stream payload straight into your resources public bucket
+           
             file_data = file.read()
             supabase.storage.from_("resources").upload(
                 path=unique_filename,
@@ -87,7 +87,7 @@ def upload():
         except Exception as e:
             return f"Supabase Storage Engine upload failure: {str(e)}", 500
 
-        # Save resource record information directly with your newly generated public URL link
+       
         supabase.table("resources").insert({
             "title": title,
             "subject_code": subject_code,
