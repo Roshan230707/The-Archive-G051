@@ -55,20 +55,28 @@
                     </div>
                     <div>
                         <span>{{ comment.created_at[:10] }}</span>
-                        | <a href="javascript:void(0);" onclick="toggleEdit('{{ comment.id|string }}')" style="color: var(--primary); text-decoration: underline; margin-left: 5px;">Edit</a>
-                        | <a href="/resource/{{ resource.id }}/comment/{{ comment.id }}/delete" onclick="return confirm('Delete this comment permanently?')" style="color: #a94442; text-decoration: underline; margin-left: 5px;">Delete</a>
+                        {% set comment_owner = comment.user_email or comment.email or comment.user or comment.username %}
+                        
+                       
+                        {% if session.user == comment_owner or session.user == 'roshanvictor237@gmail.com' or session.user == 'caitlintnathan2007@gmail.com' or session.is_admin %}
+                            | <a href="/resource/{{ resource.id }}?edit={{ comment.id }}" style="color: var(--primary); text-decoration: underline; margin-left: 5px;">Edit</a>
+                            | <a href="/resource/{{ resource.id }}/comment/{{ comment.id }}/delete" onclick="return confirm('Delete this comment permanently?')" style="color: #a94442; text-decoration: underline; margin-left: 5px;">Delete</a>
+                        {% endif %}
                     </div>
                 </div>
                 
-                <p id="display-{{ comment.id|string }}" style="font-size: 0.92rem; color: var(--text-main); font-weight: 400; line-height: 1.4;">{{ comment.comment_text }}</p>
-                
-                <form id="edit-form-{{ comment.id|string }}" action="/resource/{{ resource.id }}/comment/{{ comment.id }}/edit" method="POST" style="display: none; margin-top: 8px;">
-                    <textarea name="comment_text" class="upload-field" rows="2" required style="resize: vertical; background: white; margin-bottom: 5px;">{{ comment.comment_text }}</textarea>
-                    <div style="display: flex; gap: 5px;">
-                        <button type="submit" class="btn-search" style="padding: 4px 10px; font-size: 0.75rem;">Save</button>
-                        <button type="button" class="btn-download" onclick="toggleEdit('{{ comment.id|string }}')" style="padding: 4px 10px; font-size: 0.75rem; width: auto; margin-top: 0;">Cancel</button>
-                    </div>
-                </form>
+               
+                {% if request.args.get('edit') == comment.id|string %}
+                    <form action="/resource/{{ resource.id }}/comment/{{ comment.id }}/edit" method="POST" style="margin-top: 8px;">
+                        <textarea name="comment_text" class="upload-field" rows="2" required style="resize: vertical; background: white; margin-bottom: 5px;">{{ comment.comment_text }}</textarea>
+                        <div style="display: flex; gap: 5px;">
+                            <button type="submit" class="btn-search" style="padding: 4px 10px; font-size: 0.75rem;">Save</button>
+                            <a href="/resource/{{ resource.id }}" class="btn-download" style="padding: 4px 10px; font-size: 0.75rem; width: auto; margin-top: 0; text-decoration: none; text-align: center; display: inline-block;">Cancel</a>
+                        </div>
+                    </form>
+                {% else %}
+                    <p style="font-size: 0.92rem; color: var(--text-main); font-weight: 400; line-height: 1.4;">{{ comment.comment_text }}</p>
+                {% endif %}
             </div>
             {% endfor %}
             
@@ -77,20 +85,5 @@
             {% endif %}
         </div>
     </section>
-
-    <script>
-        function toggleEdit(commentId) {
-            var textDisplay = document.getElementById('display-' + commentId);
-            var editForm = document.getElementById('edit-form-' + commentId);
-            
-            if (editForm.style.display === 'none') {
-                editForm.style.display = 'block';
-                textDisplay.style.display = 'none';
-            } else {
-                editForm.style.display = 'none';
-                textDisplay.style.display = 'block';
-            }
-        }
-    </script>
 </body>
 </html>

@@ -17,7 +17,6 @@ def view_resource(resource_id):
         
         comments_res = supabase.table("comments").select("*").eq("resource_id", resource_id).order("created_at", desc=True).execute()
         
-       
         if comments_res.data:
             print("\n🔵 CURRENT COMMENT DATABASE KEYS LOOK LIKE THIS:", comments_res.data[0], "\n")
             
@@ -67,10 +66,15 @@ def edit_comment(resource_id, comment_id):
             return "Comment not found", 404
             
         comment_data = comment_check.data[0]
-        
         owner_email = comment_data.get("user_email") or comment_data.get("email")
         
-        if owner_email != session["user"]:
+        is_admin = (
+            session.get("is_admin") == True or 
+            session.get("user") == "roshanvictor237@gmail.com" or 
+            session.get("user") == "caitlintnathan2007@gmail.com"
+        )
+        
+        if owner_email != session["user"] and not is_admin:
             abort(403)
             
         supabase.table("comments").update({"comment_text": new_text}).eq("id", comment_id).execute()
@@ -92,7 +96,13 @@ def delete_comment(resource_id, comment_id):
         comment_data = comment_check.data[0]
         owner_email = comment_data.get("user_email") or comment_data.get("email")
         
-        if owner_email != session["user"]:
+        is_admin = (
+            session.get("is_admin") == True or 
+            session.get("user") == "roshanvictor237@gmail.com" or 
+            session.get("user") == "caitlintnathan2007@gmail.com"
+        )
+        
+        if owner_email != session["user"] and not is_admin:
             abort(403)
             
         supabase.table("comments").delete().eq("id", comment_id).execute()
